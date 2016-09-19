@@ -1,0 +1,94 @@
+#include <iostream>
+#include <map>
+#include <math.h>
+
+bool isNumberSimple(int number);
+
+int main(int argc, const char *argv[])
+{
+    int a;
+    
+    std::cout << "Enter number\n";
+    std::cin >> a;
+    
+    if (a <= 0) {
+        std::cout << "Entered text isn't a number or is <= 0";
+        
+        return 0;
+    }
+    
+    if (isNumberSimple(a)) {
+        std::cout << "Entered number is simple";
+        
+        return 0;
+    }
+    
+    std::map<int, int> simpleDeviders;
+    int dividedA = a;
+    
+    for (int i = 2; i <= dividedA; i++) {
+        if (isNumberSimple(i)) {
+            while (dividedA % i == 0) {
+                dividedA /= i;
+                
+                if (simpleDeviders.find(i) == simpleDeviders.end()) {
+                    simpleDeviders.insert(std::pair<int,int>(i, 1));
+                } else {
+                    simpleDeviders.at(i)++;
+                }
+            }
+        }
+    }
+    
+    std::cout << a + " = ";
+    
+    for (auto iterator = simpleDeviders.begin(); iterator != simpleDeviders.end(); iterator++) {
+        
+        std::cout << iterator->first;
+        if (iterator->second != 1) {
+            std::cout << "^" << iterator->second;
+        }
+        if (std::next(iterator) == simpleDeviders.end()) {
+            std::cout << "\n";
+        } else {
+            std::cout << " + ";
+        }
+    }
+    
+    int numberOfAllDeviders = 1;
+    for (auto iterator = simpleDeviders.begin(); iterator != simpleDeviders.end(); iterator++) {
+        numberOfAllDeviders *= (iterator->second + 1);
+    }
+    
+    
+    
+    
+    
+    
+    
+    std::cout << "Number of all deviders = " << numberOfAllDeviders << "\n";
+    
+    
+    std::cout << "All Deviders:";
+    
+    for (int i = 1; i <= a; i++) {
+        if (a % i == 0) {
+            std::cout << " " << i;
+        }
+    }
+    
+    std::cout << "\n";
+    
+    return 0;
+}
+
+bool isNumberSimple(int number)
+{
+    for (int i = 2; i <= sqrt(number); i++) {
+        if (isNumberSimple(i) && number % i == 0) {
+            return false;
+        }
+    }
+    
+    return true;
+}
